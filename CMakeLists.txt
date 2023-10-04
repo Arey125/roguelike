@@ -1,0 +1,19 @@
+cmake_minimum_required(VERSION 3.22)
+
+set(CMAKE_CXX_STANDARD 20)
+
+set(CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake_modules" ${CMAKE_MODULE_PATH})
+set(CMAKE_TOOLCHAIN_FILE "~/software/vcpkg/scripts/buildsystems/vcpkg.cmake")
+
+project(roguelike)
+
+include_directories(src)
+
+find_package(SFML 2.5 COMPONENTS system window graphics network audio REQUIRED)
+find_package(box2d CONFIG REQUIRED)
+
+# add_executable(roguelike main.cpp)
+add_executable(roguelike src/main.cpp src/app/app.cpp src/app/app.h src/shared/game_object/game_object.cpp src/shared/game_object/game_object.h src/shared/index.h src/shared/rigid_body/rigid_body.cpp src/shared/rigid_body/rigid_body.h)
+
+target_link_libraries(roguelike PRIVATE box2d::box2d)
+target_link_libraries(roguelike PRIVATE sfml-system sfml-network sfml-graphics sfml-window)
