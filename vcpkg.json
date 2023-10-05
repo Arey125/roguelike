@@ -2,6 +2,8 @@
   "$schema": "https://raw.githubusercontent.com/microsoft/vcpkg-tool/main/docs/vcpkg.schema.json",
   "dependencies": [
     "sfml",
-    "box2d"
+    "box2d",
+    "imgui",
+    "imgui-sfml"
   ]
 }

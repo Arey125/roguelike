@@ -2,6 +2,9 @@
 #include <box2d/b2_body.h>
 #include <box2d/b2_polygon_shape.h>
 #include <box2d/b2_fixture.h>
+#include <imgui.h>
+#include <imgui-SFML.h>
+
 #include "app.h"
 #include "shared/index.h"
 
@@ -65,6 +68,7 @@ RigidBody createGround(b2World &world) {
 
 App::App() :window(sf::VideoMode(800, 800), "SFML works!") {
     window.setFramerateLimit(60);
+    ImGui::SFML::Init(window);
 }
 
 void App::run() {
@@ -76,22 +80,32 @@ void App::run() {
     int32 velocityIterations = 6;
     int32 positionIterations = 2;
 
+    sf::Clock deltaClock;
     while (window.isOpen())
     {
         sf::Event event;
         while (window.pollEvent(event))
         {
+            ImGui::SFML::ProcessEvent(event);
             if (event.type == sf::Event::Closed)
                 window.close();
         }
+        ImGui::SFML::Update(window, deltaClock.restart());
 
         world.Step(1./60, velocityIterations, positionIterations);
         box.update();
         ground.update();
 
+        ImGui::Begin("Hello, world!");
+        ImGui::Button("Look at this pretty button");
+        ImGui::End();
+
+
         window.clear();
         box.render(window);
         ground.render(window);
+        ImGui::SFML::Render(window);
         window.display();
     }
+    ImGui::SFML::Shutdown();
 }
