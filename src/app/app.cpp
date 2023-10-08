@@ -1,12 +1,13 @@
-#include <box2d/b2_world.h>
-#include <box2d/b2_body.h>
-#include <box2d/b2_polygon_shape.h>
-#include <box2d/b2_fixture.h>
+#include <box2d/box2d.h>
+
 #include <imgui.h>
 #include <imgui-SFML.h>
+#include <iostream>
 
 #include "app.h"
-#include "shared/index.h"
+#include "shared/game_object.h"
+#include "shared/rigid_body/rigid_body.h"
+#include "shared/entity/entity.h"
 
 RigidBody createBox(b2World &world) {
     b2BodyDef bodyDef;
@@ -21,7 +22,7 @@ RigidBody createBox(b2World &world) {
 
     b2FixtureDef fixtureDef;
     fixtureDef.shape = &dynamicBox;
-    fixtureDef.density = 10.0f;
+    fixtureDef.density = 0.03f;
     fixtureDef.friction = 0.5;
     fixtureDef.restitution = 0.5;
 
@@ -72,10 +73,11 @@ App::App() :window(sf::VideoMode(800, 800), "SFML works!") {
 }
 
 void App::run() {
-    b2World world({0, 100});
+    b2World world({0, 0});
 
     auto box = createBox(world);
     auto ground = createGround(world);
+    auto entity = Entity(world);
 
     int32 velocityIterations = 6;
     int32 positionIterations = 2;
@@ -91,19 +93,22 @@ void App::run() {
                 window.close();
         }
         ImGui::SFML::Update(window, deltaClock.restart());
-
         world.Step(1./60, velocityIterations, positionIterations);
         box.update();
         ground.update();
+        entity.update();
 
         ImGui::Begin("Hello, world!");
-        ImGui::Button("Look at this pretty button");
+        if (ImGui::Button("Look at this pretty button")) {
+            std::cout << "button is clicked" << std::endl;
+        }
         ImGui::End();
 
 
         window.clear();
         box.render(window);
         ground.render(window);
+        entity.render(window);
         ImGui::SFML::Render(window);
         window.display();
     }
