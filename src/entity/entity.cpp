@@ -1,9 +1,6 @@
 #include <box2d/box2d.h>
-#include <SFML/System.hpp>
-#include <vector>
-#include <algorithm>
-#include <iostream>
 
+#include "controllers/input_controller.h"
 #include "entity.h"
 
 
@@ -22,6 +19,8 @@ Entity::Entity(b2World &world) {
     fixtureDef.density = 0.01f;
     fixtureDef.restitution = 0;
 
+    controller = std::make_unique<InputController>(body);
+
     shape.setPointCount(dynamicBox.m_count);
     for (int i = 0; i < dynamicBox.m_count;i++) {
         auto [x, y] = dynamicBox.m_vertices[i];
@@ -35,17 +34,7 @@ Entity::Entity(b2World &world) {
 }
 
 void Entity::update() {
-    std::vector<std::pair<sf::Keyboard::Key, b2Vec2>> forces = {
-        {sf::Keyboard::W, b2Vec2(0.0f, -1000.0f)},
-        {sf::Keyboard::A, b2Vec2(-1000.0f, 0.0f)},
-        {sf::Keyboard::S, b2Vec2(0.0f, 1000.0f)},
-        {sf::Keyboard::D, b2Vec2(1000.0f, 0.0f)},
-    };
-
-    for (auto [key, force] : forces)
-      if (sf::Keyboard::isKeyPressed(key)) {
-        body->ApplyForceToCenter(force, true);
-      }
+    controller->update();
 
     auto k = 0.1;
     auto velocity = body->GetLinearVelocity();

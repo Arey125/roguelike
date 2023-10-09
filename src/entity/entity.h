@@ -1,6 +1,7 @@
 #include <box2d/b2_body.h>
 
 #include "shared/game_object.h"
+#include "shared/controller.h"
 
 class Entity: public GameObject {
 public:
@@ -11,4 +12,5 @@ public:
 private:
   sf::ConvexShape shape;
   b2Body *body;
+  std::unique_ptr<Controller> controller;
 };

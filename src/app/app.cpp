@@ -7,7 +7,7 @@
 #include "app.h"
 #include "shared/game_object.h"
 #include "shared/rigid_body/rigid_body.h"
-#include "shared/entity/entity.h"
+#include "entity/entity.h"
 
 RigidBody createBox(b2World &world) {
     b2BodyDef bodyDef;
