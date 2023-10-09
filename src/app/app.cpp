@@ -98,9 +98,15 @@ void App::run() {
         ground.update();
         entity.update();
 
-        ImGui::Begin("Hello, world!");
-        if (ImGui::Button("Look at this pretty button")) {
-            std::cout << "button is clicked" << std::endl;
+        ImVec2 center = ImGui::GetMainViewport()->GetCenter();
+        ImGui::SetNextWindowPos(center, ImGuiCond_Appearing, ImVec2(0.5f, 0.5f));
+        
+        ImGui::Begin("Menu", nullptr, ImGuiWindowFlags_NoMove
+            | ImGuiWindowFlags_NoResize
+            | ImGuiWindowFlags_NoCollapse
+        );
+        if (ImGui::Button("Quit")) {
+            window.close();
         }
         ImGui::End();
 

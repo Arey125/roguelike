@@ -15,7 +15,9 @@ find_package(box2d CONFIG REQUIRED)
 find_package(imgui CONFIG REQUIRED)
 find_package(ImGui-SFML CONFIG REQUIRED)
 
-# add_executable(roguelike main.cpp)
+# file(GLOB src_files CONFIGURE_DEPENDS src/**/*.cpp)
+# add_executable(roguelike ${src_files})
+
 add_executable(roguelike
   src/main.cpp
   src/app/app.cpp
