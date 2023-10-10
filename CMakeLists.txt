@@ -22,7 +22,8 @@ add_executable(roguelike
   src/main.cpp
   src/app/app.cpp
   src/shared/rigid_body/rigid_body.cpp
-  src/shared/entity/entity.cpp
+  src/entity/entity.cpp
+  src/controllers/input_controller.cpp
 )
 
 # link libraries
