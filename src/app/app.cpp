@@ -7,7 +7,7 @@
 #include "app.h"
 #include "shared/game_object.h"
 #include "shared/rigid_body/rigid_body.h"
-#include "shared/entity/entity.h"
+#include "entity/entity.h"
 
 RigidBody createBox(b2World &world) {
     b2BodyDef bodyDef;
@@ -67,6 +67,20 @@ RigidBody createGround(b2World &world) {
     return {shape, body};
 }
 
+void showMenu(sf::RenderWindow &window) {
+    ImVec2 center = ImGui::GetMainViewport()->GetCenter();
+    ImGui::SetNextWindowPos(center, ImGuiCond_Appearing, ImVec2(0.5f, 0.5f));
+    
+    ImGui::Begin("Menu", nullptr, ImGuiWindowFlags_NoMove
+        | ImGuiWindowFlags_NoResize
+        | ImGuiWindowFlags_NoCollapse
+    );
+    if (ImGui::Button("Quit")) {
+        window.close();
+    }
+    ImGui::End();
+}
+
 App::App() :window(sf::VideoMode(800, 800), "SFML works!") {
     window.setFramerateLimit(60);
     ImGui::SFML::Init(window);
@@ -83,14 +97,22 @@ void App::run() {
     int32 positionIterations = 2;
 
     sf::Clock deltaClock;
+    bool menuIsOpen = false;
     while (window.isOpen())
     {
         sf::Event event;
         while (window.pollEvent(event))
         {
             ImGui::SFML::ProcessEvent(event);
-            if (event.type == sf::Event::Closed)
+
+            auto type = event.type;
+            if (type == sf::Event::Closed)
                 window.close();
+
+            if (type == sf::Event::KeyPressed)
+                if (event.key.code == sf::Keyboard::Escape)
+                    menuIsOpen = !menuIsOpen;
+
         }
         ImGui::SFML::Update(window, deltaClock.restart());
         world.Step(1./60, velocityIterations, positionIterations);
@@ -98,18 +120,9 @@ void App::run() {
         ground.update();
         entity.update();
 
-        ImVec2 center = ImGui::GetMainViewport()->GetCenter();
-        ImGui::SetNextWindowPos(center, ImGuiCond_Appearing, ImVec2(0.5f, 0.5f));
-        
-        ImGui::Begin("Menu", nullptr, ImGuiWindowFlags_NoMove
-            | ImGuiWindowFlags_NoResize
-            | ImGuiWindowFlags_NoCollapse
-        );
-        if (ImGui::Button("Quit")) {
-            window.close();
+        if (menuIsOpen) {
+            showMenu(window);
         }
-        ImGui::End();
-
 
         window.clear();
         box.render(window);
