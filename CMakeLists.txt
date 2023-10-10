@@ -15,15 +15,15 @@ find_package(box2d CONFIG REQUIRED)
 find_package(imgui CONFIG REQUIRED)
 find_package(ImGui-SFML CONFIG REQUIRED)
 
-# file(GLOB src_files CONFIGURE_DEPENDS src/**/*.cpp)
-# add_executable(roguelike ${src_files})
+file(GLOB_RECURSE src_files CONFIGURE_DEPENDS src/*.cpp)
+add_executable(roguelike ${src_files})
 
-add_executable(roguelike
-  src/main.cpp
-  src/app/app.cpp
-  src/shared/rigid_body/rigid_body.cpp
-  src/shared/entity/entity.cpp
-)
+# add_executable(roguelike
+#   src/main.cpp
+#   src/app/app.cpp
+#   src/shared/rigid_body/rigid_body.cpp
+#   src/shared/entity/entity.cpp
+# )
 
 # link libraries
 target_link_libraries(roguelike PRIVATE box2d::box2d)
