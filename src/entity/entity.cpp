@@ -4,7 +4,7 @@
 #include "entity.h"
 
 
-Entity::Entity(b2World &world) {
+Entity::Entity(b2World &world, std::function<Controller *(b2Body *)> createController) {
     b2BodyDef bodyDef;
     bodyDef.type = b2_dynamicBody;
     bodyDef.position.Set(400.0f, 300.0f);
@@ -19,7 +19,7 @@ Entity::Entity(b2World &world) {
     fixtureDef.density = 0.01f;
     fixtureDef.restitution = 0;
 
-    controller = std::make_unique<InputController>(body);
+    controller = createController(body);
 
     shape.setPointCount(dynamicBox.m_count);
     for (int i = 0; i < dynamicBox.m_count;i++) {
@@ -31,6 +31,10 @@ Entity::Entity(b2World &world) {
 
     auto [centroid_x, centroid_y] = dynamicBox.m_centroid;
     shape.setOrigin(centroid_x, centroid_y);
+}
+
+Entity::~Entity() {
+    delete controller;
 }
 
 void Entity::update() {
