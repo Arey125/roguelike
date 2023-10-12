@@ -16,8 +16,11 @@ public:
     void testContact(b2Contact *contact);
 
 private:
-  sf::ConvexShape shape;
-  b2Body *body;
-  Controller* controller;
-  bool contact = false;
+    sf::ConvexShape shape;
+    b2Body *body;
+    Controller* controller;
+
+
+    // for test purposes
+      bool contact = false;
 };
