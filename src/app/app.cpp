@@ -120,6 +120,9 @@ void App::run() {
         }
         ImGui::SFML::Update(window, deltaClock.restart());
         world.Step(1./60, velocityIterations, positionIterations);
+        for (auto contact = world.GetContactList(); contact; contact = contact->GetNext()) {
+            player.testContact(contact);
+        }
         box.update();
         ground.update();
         player.update();

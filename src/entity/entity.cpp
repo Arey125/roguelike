@@ -49,8 +49,15 @@ void Entity::update() {
     float angle = body->GetAngle();
     shape.setRotation(angle * 180 / 3.14159f);
     shape.setPosition({position.x, position.y});
+    shape.setFillColor(contact ? sf::Color::Red : sf::Color::White);
+    contact = false;
 }
 
 void Entity::render(sf::RenderTarget &target) {
     target.draw(shape);
+}
+
+void Entity::testContact(b2Contact *contact) {
+    if (contact->GetFixtureA() == body->GetFixtureList() || contact->GetFixtureB() == body->GetFixtureList())
+        this->contact = true;
 }
