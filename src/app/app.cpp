@@ -8,6 +8,9 @@
 #include "shared/game_object.h"
 #include "shared/rigid_body/rigid_body.h"
 #include "entity/entity.h"
+#include "controllers/input_controller.h"
+#include "controllers/ai_controller.h"
+#include "controllers/create_controller.h"
 
 RigidBody createBox(b2World &world) {
     b2BodyDef bodyDef;
@@ -91,7 +94,8 @@ void App::run() {
 
     auto box = createBox(world);
     auto ground = createGround(world);
-    auto entity = Entity(world);
+    auto player = Entity(world, createController<InputController>);
+    auto entity = Entity(world, createController<AIController>);
 
     int32 velocityIterations = 6;
     int32 positionIterations = 2;
@@ -118,6 +122,7 @@ void App::run() {
         world.Step(1./60, velocityIterations, positionIterations);
         box.update();
         ground.update();
+        player.update();
         entity.update();
 
         if (menuIsOpen) {
@@ -128,6 +133,8 @@ void App::run() {
         box.render(window);
         ground.render(window);
         entity.render(window);
+        player.render(window);
+        
         ImGui::SFML::Render(window);
         window.display();
     }
