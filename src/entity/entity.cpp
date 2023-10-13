@@ -58,6 +58,12 @@ void Entity::render(sf::RenderTarget &target) {
 }
 
 void Entity::testContact(b2Contact *contact) {
-    if (contact->GetFixtureA() == body->GetFixtureList() || contact->GetFixtureB() == body->GetFixtureList())
+    const bool isFixtureA = contact->GetFixtureA() == body->GetFixtureList();
+    const bool isFixtureB = contact->GetFixtureB() == body->GetFixtureList();
+
+    if (isFixtureA || isFixtureB) {
+        if (!contact->IsTouching())
+            return;
         this->contact = true;
+    }
 }
