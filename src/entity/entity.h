@@ -9,11 +9,18 @@ public:
     Entity(b2World &world, std::function<Controller *(b2Body *)> createController);
     ~Entity();
 
-    virtual void render(sf::RenderTarget &target);
-    virtual void update();
+    virtual void render(sf::RenderTarget &target) override;
+    virtual void update() override;
+
+    // for test purposes
+    void testContact(b2Contact *contact);
 
 private:
-  sf::ConvexShape shape;
-  b2Body *body;
-  Controller* controller;
+    sf::ConvexShape shape;
+    b2Body *body;
+    Controller* controller;
+
+
+    // for test purposes
+      bool contact = false;
 };
