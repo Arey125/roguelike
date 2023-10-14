@@ -3,15 +3,54 @@
 
 #include "menu.h"
 
-Menu::Menu(sf::Window &window): window(window), menuIsOpen(false) {}
+Menu::Menu(sf::Window &window):
+    window(window),
+    menuIsOpen(false),
+    fps(60),
+    v_sync(false)
+{}
 
+
+int Menu::getFPS() {
+    return fps;
+}
 
 void Menu::processEvent(sf::Event &event) {
     auto type = event.type;
 
     if (type == sf::Event::KeyPressed)
-        if (event.key.code == sf::Keyboard::Escape)
+        if (event.key.code == sf::Keyboard::Escape) {
+            state = MenuState::Main;
             menuIsOpen = !menuIsOpen;
+        }
+}
+
+void Menu::showMainMenu() {
+    if (ImGui::Button("Resume")) {
+        menuIsOpen = false;
+    }
+    if (ImGui::Button("Settings")) {
+        state = MenuState::Settings;
+    }
+    if (ImGui::Button("Quit")) {
+        window.close();
+    }
+}
+
+void Menu::showSettings() {
+    ImGui::Text("Settings");
+    
+    if (ImGui::Checkbox("Vertical sync", &v_sync)) {
+        window.setVerticalSyncEnabled(v_sync);
+    }
+
+    if (ImGui::SliderInt("FPS", &fps, 20, 120)) {
+        window.setFramerateLimit(fps);
+    }
+
+    if (ImGui::Button("Back")) {
+        state = MenuState::Main;
+    }
 }
 
 void Menu::showMenu() {
@@ -21,13 +60,14 @@ void Menu::showMenu() {
     ImGui::Begin("Menu", nullptr, ImGuiWindowFlags_NoMove
         | ImGuiWindowFlags_NoResize
         | ImGuiWindowFlags_NoCollapse
+        | ImGuiWindowFlags_AlwaysAutoResize
     );
 
-    if (ImGui::Button("Resume")) {
-        menuIsOpen = false;
+    if (state == MenuState::Main) {
+        showMainMenu();
     }
-    if (ImGui::Button("Quit")) {
-        window.close();
+    if (state == MenuState::Settings) {
+        showSettings();
     }
 
     ImGui::End();

@@ -104,7 +104,10 @@ void App::run() {
         }
 
         ImGui::SFML::Update(window, deltaClock.restart());
-        world.Step(1./60, velocityIterations, positionIterations);
+        menu.update();
+
+        auto fps = menu.getFPS();
+        world.Step(1./fps, velocityIterations, positionIterations);
         for (auto contact = world.GetContactList(); contact; contact = contact->GetNext()) {
             player.testContact(contact);
         }
@@ -114,7 +117,6 @@ void App::run() {
         player.update();
         entity.update();
         
-        menu.update();
 
 
         window.clear();
