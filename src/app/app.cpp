@@ -7,7 +7,7 @@
 #include "entity/entity_factory.h"
 #include "shared/rigid_body/rigid_body.h"
 #include "entity/entity.h"
-#include "ui/show_menu.h"
+#include "ui/menu.h"
 
 RigidBody createBox(b2World &world) {
     b2BodyDef bodyDef;
@@ -87,7 +87,8 @@ void App::run() {
     int32 positionIterations = 2;
 
     sf::Clock deltaClock;
-    bool menuIsOpen = false;
+    Menu menu(window);
+
     while (window.isOpen())
     {
         sf::Event event;
@@ -99,11 +100,9 @@ void App::run() {
             if (type == sf::Event::Closed)
                 window.close();
 
-            if (type == sf::Event::KeyPressed)
-                if (event.key.code == sf::Keyboard::Escape)
-                    menuIsOpen = !menuIsOpen;
-
+            menu.processEvent(event);
         }
+
         ImGui::SFML::Update(window, deltaClock.restart());
         world.Step(1./60, velocityIterations, positionIterations);
         for (auto contact = world.GetContactList(); contact; contact = contact->GetNext()) {
@@ -114,10 +113,9 @@ void App::run() {
 
         player.update();
         entity.update();
+        
+        menu.update();
 
-        if (menuIsOpen) {
-            showMenu(window);
-        }
 
         window.clear();
         box.render(window);
