@@ -1,0 +1,63 @@
+#include <box2d/box2d.h>
+#include <SFML/System.hpp>
+#include <vector>
+#include <algorithm>
+#include <iostream>
+
+#include "entity.h"
+
+
+Entity::Entity(b2World &world) {
+    b2BodyDef bodyDef;
+    bodyDef.type = b2_dynamicBody;
+    bodyDef.position.Set(400.0f, 300.0f);
+    bodyDef.fixedRotation = true;
+
+    body = world.CreateBody(&bodyDef);
+    b2PolygonShape dynamicBox;
+    dynamicBox.SetAsBox(10.0f, 10.0f);
+
+    b2FixtureDef fixtureDef;
+    fixtureDef.shape = &dynamicBox;
+    fixtureDef.density = 0.01f;
+    fixtureDef.restitution = 0;
+
+    shape.setPointCount(dynamicBox.m_count);
+    for (int i = 0; i < dynamicBox.m_count;i++) {
+        auto [x, y] = dynamicBox.m_vertices[i];
+        shape.setPoint(i, {x, y});
+    }
+
+    body->CreateFixture(&fixtureDef);
+
+    auto [centroid_x, centroid_y] = dynamicBox.m_centroid;
+    shape.setOrigin(centroid_x, centroid_y);
+}
+
+void Entity::update() {
+    std::vector<std::pair<sf::Keyboard::Key, b2Vec2>> forces = {
+        {sf::Keyboard::W, b2Vec2(0.0f, -1000.0f)},
+        {sf::Keyboard::A, b2Vec2(-1000.0f, 0.0f)},
+        {sf::Keyboard::S, b2Vec2(0.0f, 1000.0f)},
+        {sf::Keyboard::D, b2Vec2(1000.0f, 0.0f)},
+    };
+
+    for (auto [key, force] : forces)
+      if (sf::Keyboard::isKeyPressed(key)) {
+        body->ApplyForceToCenter(force, true);
+      }
+
+    auto k = 0.1;
+    auto velocity = body->GetLinearVelocity();
+    b2Vec2 force = b2Vec2(-velocity.Length() * velocity.x * k, -velocity.Length() * velocity.y * k);
+    body->ApplyForceToCenter(force, true);
+
+    b2Vec2 position = body->GetPosition();
+    float angle = body->GetAngle();
+    shape.setRotation(angle * 180 / 3.14159f);
+    shape.setPosition({position.x, position.y});
+}
+
+void Entity::render(sf::RenderTarget &target) {
+    target.draw(shape);
+}

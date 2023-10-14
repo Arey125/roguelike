@@ -1,7 +1,7 @@
 #ifndef TEST_FOR_BOX_2D_RIGID_BODY_H
 #define TEST_FOR_BOX_2D_RIGID_BODY_H
 
-#include "../game_object/game_object.h"
+#include "shared/game_object.h"
 #include <box2d/b2_body.h>
 
 class RigidBody: public GameObject {
