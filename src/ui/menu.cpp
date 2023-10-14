@@ -22,9 +22,14 @@ void Menu::showMenu() {
         | ImGuiWindowFlags_NoResize
         | ImGuiWindowFlags_NoCollapse
     );
+
+    if (ImGui::Button("Resume")) {
+        menuIsOpen = false;
+    }
     if (ImGui::Button("Quit")) {
         window.close();
     }
+
     ImGui::End();
 }
 
