@@ -2,15 +2,12 @@
 
 #include <imgui.h>
 #include <imgui-SFML.h>
-#include <iostream>
 
 #include "app.h"
-#include "shared/game_object.h"
+#include "entity/entity_factory.h"
 #include "shared/rigid_body/rigid_body.h"
 #include "entity/entity.h"
-#include "controllers/input_controller.h"
-#include "controllers/ai_controller.h"
-#include "controllers/create_controller.h"
+#include "ui/show_menu.h"
 
 RigidBody createBox(b2World &world) {
     b2BodyDef bodyDef;
@@ -70,20 +67,6 @@ RigidBody createGround(b2World &world) {
     return {shape, body};
 }
 
-void showMenu(sf::RenderWindow &window) {
-    ImVec2 center = ImGui::GetMainViewport()->GetCenter();
-    ImGui::SetNextWindowPos(center, ImGuiCond_Appearing, ImVec2(0.5f, 0.5f));
-    
-    ImGui::Begin("Menu", nullptr, ImGuiWindowFlags_NoMove
-        | ImGuiWindowFlags_NoResize
-        | ImGuiWindowFlags_NoCollapse
-    );
-    if (ImGui::Button("Quit")) {
-        window.close();
-    }
-    ImGui::End();
-}
-
 App::App() :window(sf::VideoMode(800, 800), "SFML works!") {
     window.setFramerateLimit(60);
     ImGui::SFML::Init(window);
@@ -94,8 +77,11 @@ void App::run() {
 
     auto box = createBox(world);
     auto ground = createGround(world);
-    auto player = Entity(world, createController<InputController>);
-    auto entity = Entity(world, createController<AIController>);
+
+    EntityFactory entity_factory(world);
+
+    auto player = entity_factory.createPlayer();
+    auto entity = entity_factory.createEntity();
 
     int32 velocityIterations = 6;
     int32 positionIterations = 2;
@@ -125,6 +111,7 @@ void App::run() {
         }
         box.update();
         ground.update();
+
         player.update();
         entity.update();
 
