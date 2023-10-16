@@ -2,8 +2,9 @@ cmake_minimum_required(VERSION 3.22)
 
 set(CMAKE_CXX_STANDARD 20)
 
+# dir
 set(CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake_modules" ${CMAKE_MODULE_PATH})
-set(CMAKE_TOOLCHAIN_FILE "~/software/vcpkg/scripts/buildsystems/vcpkg.cmake")
+# set(CMAKE_TOOLCHAIN_FILE "~/software/vcpkg/scripts/buildsystems/vcpkg.cmake")
 
 project(roguelike)
 
