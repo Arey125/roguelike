@@ -4,6 +4,8 @@
 #include "SFML/Graphics.hpp"
 #include <vector>
 
+#include "tail.h"
+
 class Chunk
 {
 public:
@@ -14,10 +16,6 @@ public:
 
     //
     static bool randBool(double pTrue = 0.5);
-
-    // пересекается ли объект со стенкой 
-    bool intersectsWall(sf::Rect<float>& objRect, 
-                        std::vector<sf::Vector2u>& idTails); 
 
     ~Chunk();
 
@@ -32,10 +30,7 @@ private:
     const unsigned int SIZE = 32; 
 
     // Квадраты внутри одного чанка
-    std::vector <std::vector <bool>*> tiles;
-
-    // Цвета квадратов
-    std::vector <std::vector <sf::Color>*> colorTails;
+    std::vector <std::vector <Tail*>*> tiles;
 
     // Размер одного квадрата 
     const unsigned int sizeTail = 50;

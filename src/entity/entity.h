@@ -8,7 +8,7 @@
 
 class Entity: public GameObject {
 public:
-    Entity(b2World &world, std::function<Controller *(b2Body *)> createController);
+    Entity(b2World &world, std::function <Controller* (b2Body*)> createController);
     ~Entity();
 
     virtual void render(sf::RenderTarget &target) override;
