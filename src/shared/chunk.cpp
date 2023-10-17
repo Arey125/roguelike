@@ -19,7 +19,14 @@ Chunk::Chunk()
 
     this->generation();
 
-    // Присваивание цвета в зависимости от типа тайла
+    // Присваивание цвета в зависимости от карты
+    setColorsTails();
+
+    shape.setSize(sf::Vector2f(sizeTail, sizeTail));
+}
+
+void Chunk::setColorsTails()
+{
     bool isWall;
     sf::Color colorTail;
     for (int idX = 0; idX < SIZE; idX++)
@@ -34,8 +41,6 @@ Chunk::Chunk()
             colorTails[idX]->push_back(colorTail);
         }
     }
-
-    shape.setSize(sf::Vector2f(sizeTail, sizeTail));
 }
 
 void Chunk::generation()

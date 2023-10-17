@@ -25,6 +25,9 @@ private:
     //
     void generation();
 
+    //
+    void setColorsTails();
+
     // Размер чанка
     const unsigned int SIZE = 32; 
 
