@@ -9,6 +9,9 @@ public:
 
     void render(sf::RenderTarget &target);
 
+    // Узнать касается ли прямоугольник препядствия на карте
+    bool intersectsWall(sf::Rect<float>& objRect); 
+
 protected:
     Map(/* int sid_Map*/);
 

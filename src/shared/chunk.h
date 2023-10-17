@@ -15,6 +15,10 @@ public:
     //
     static bool randBool(double pTrue = 0.5);
 
+    // пересекается ли объект со стенкой 
+    bool intersectsWall(sf::Rect<float>& objRect, 
+                        std::vector<sf::Vector2u>& idTails); 
+
     ~Chunk();
 
 private:
@@ -22,19 +26,24 @@ private:
     void generation();
 
     // Размер чанка
-    const unsigned int SIZE = 16; 
+    const unsigned int SIZE = 32; 
 
     // Квадраты внутри одного чанка
-    std::vector <std::vector <bool>*> squares;
+    std::vector <std::vector <bool>*> tiles;
+
+    // Цвета квадратов
+    std::vector <std::vector <sf::Color>*> colorTails;
 
     // Размер одного квадрата 
-    const unsigned int sizeShare = 50;
+    const unsigned int sizeTail = 50;
 
     //  
-    sf::RectangleShape* shapeWall;
-    sf::RectangleShape* shapeTrail;
+    sf::RectangleShape shape;
 
+    //
     double qNeighborhood(unsigned int idX, unsigned int idY);
+
+    bool contact;
 };
 
 
