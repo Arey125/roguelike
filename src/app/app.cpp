@@ -9,9 +9,12 @@
 #include "entity/entity.h"
 #include "ui/menu.h"
 
+#include "shared/map.h"
+
 App::App() :window(sf::VideoMode(800, 800), "SFML works!") {
     window.setFramerateLimit(60);
     ImGui::SFML::Init(window);
+
 }
 
 void App::run() {
@@ -26,6 +29,8 @@ void App::run() {
 
     sf::Clock deltaClock;
     Menu menu(window);
+
+    Map* map = Map::Instance();
 
     while (window.isOpen())
     {
@@ -53,8 +58,10 @@ void App::run() {
         
 
         window.clear();
+
+        map->render(window);
         player.render(window);
-        
+
         ImGui::SFML::Render(window);
         window.display();
     }
