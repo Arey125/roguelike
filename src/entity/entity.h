@@ -24,5 +24,5 @@ private:
 
 
     // for test purposes
-      bool contact = false;
+    bool contact = false;
 };

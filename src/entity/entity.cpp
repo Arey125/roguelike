@@ -52,7 +52,7 @@ void Entity::update() {
     shape.setFillColor(contact ? sf::Color::Red : sf::Color::White);
     contact = false;
 }
-
+                                                      
 void Entity::render(sf::RenderTarget &target) {
     target.draw(shape);
 }

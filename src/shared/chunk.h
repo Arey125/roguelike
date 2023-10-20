@@ -9,7 +9,7 @@
 class Chunk
 {
 public:
-    Chunk();
+    Chunk(b2World& world, float Xo, float Yo);
 
     void update();
     void render(sf::RenderTarget &target);
@@ -21,7 +21,10 @@ public:
 
 private:
     //
-    void generation();
+    float Xo, Yo;
+
+    //
+    void generation(/*const b2World& world*/);
 
     //
     void setColorsTails();

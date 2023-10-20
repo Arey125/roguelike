@@ -12,8 +12,10 @@
 class Tail: public GameObject
 {
 public:
-    Tail(bool isWay = true);
+    Tail(b2World& world, float X, float Y, bool isWay = true);
     ~Tail();
+
+    sf::Sprite& getShape();
 
     virtual void render(sf::RenderTarget &target) override;
     virtual void update() override;
@@ -21,17 +23,17 @@ public:
     void setIsWay(bool v);
     bool getIsWay();
 
-    void setColor(const sf::Color& color);
+    void setColor(const sf::Color& color);                      
     const sf::Color& getColor();
 private:
     bool isWay;
     sf::Color* color;
 
-    /*
-    sf::ConvexShape shape;
-    b2Body *body;
-    Controller* controller;
-    */
+    sf::Sprite sprite;
+
+    b2PolygonShape* Shape;
+
+    void buildBody(b2World& world, float X, float Y);
 };
 
 #endif //TAIL_H

@@ -2,7 +2,7 @@
 
 #include <box2d/box2d.h>
 
-Chunk::Chunk()
+Chunk::Chunk(b2World& world, float X, float Y): Xo(X), Yo(Y)
 {
     // Инициализация случайных тайлов
     bool isWay = false;
@@ -11,12 +11,12 @@ Chunk::Chunk()
         tiles.push_back(new std::vector <Tail*>);
         for (int j=0; j<SIZE; j++)
         {
-            isWay = randBool();
-            tiles[i]->push_back(new Tail(isWay));
+            isWay = randBool(0.8);
+            tiles[i]->push_back(new Tail(world, Xo + (j*sizeTail), Yo + (i*sizeTail), isWay));
         }
     }
 
-    this->generation();
+    this->generation(/*world*/);
 
     // Присваивание цвета в зависимости от карты
     setColorsTails();
@@ -42,7 +42,7 @@ void Chunk::setColorsTails()
     }
 }
 
-void Chunk::generation()
+void Chunk::generation(/*const b2World& world*/)
 {
     int idX;
     int idY;
@@ -70,16 +70,16 @@ void Chunk::update()
 
 void Chunk::render(sf::RenderTarget &target)
 {
-    int Xo = 0;
-    int Yo = 0;
-
     for (int idX = 0; idX < SIZE; idX++)
     {
         for (int idY = 0; idY < SIZE; idY++)
         {
+            /*
             shape.setFillColor(tiles[idX]->at(idY)->getColor());
             shape.setPosition(Xo + (idY * sizeTail), Yo + (idX * sizeTail));
-            target.draw(shape);
+            target.draw(shape);*/
+
+            target.draw(tiles.at(idX)->at(idY)->getShape());
         }
     }
 }

@@ -11,6 +11,8 @@
 
 #include "shared/map.h"
 
+#include <iostream>
+
 App::App() :window(sf::VideoMode(800, 800), "SFML works!") {
     window.setFramerateLimit(60);
     ImGui::SFML::Init(window);
@@ -31,6 +33,7 @@ void App::run() {
     Menu menu(window);
 
     Map* map = Map::Instance();
+    map->generated(world);
 
     while (window.isOpen())
     {
@@ -51,6 +54,7 @@ void App::run() {
 
         auto fps = menu.getFPS();
         world.Step(1./fps, velocityIterations, positionIterations);
+        //std::cout<< world.GetContactCount() << world.GetBodyCount() << std::endl;
         for (auto contact = world.GetContactList(); contact; contact = contact->GetNext()) {
             player.testContact(contact);
         }
