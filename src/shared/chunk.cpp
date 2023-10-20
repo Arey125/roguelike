@@ -12,7 +12,10 @@ Chunk::Chunk(b2World& world, float X, float Y): Xo(X), Yo(Y)
         for (int j=0; j<SIZE; j++)
         {
             isWay = randBool(0.8);
-            tiles[i]->push_back(new Tail(world, Xo + (j*sizeTail), Yo + (i*sizeTail), isWay));
+            tiles[i]->push_back(new Tail(world, 
+                                                Xo + (j*sizeTail), 
+                                                Yo + (i*sizeTail), 
+                                                sizeTail, isWay));
         }
     }
 
@@ -74,12 +77,7 @@ void Chunk::render(sf::RenderTarget &target)
     {
         for (int idY = 0; idY < SIZE; idY++)
         {
-            /*
-            shape.setFillColor(tiles[idX]->at(idY)->getColor());
-            shape.setPosition(Xo + (idY * sizeTail), Yo + (idX * sizeTail));
-            target.draw(shape);*/
-
-            target.draw(tiles.at(idX)->at(idY)->getShape());
+            target.draw(tiles.at(idX)->at(idY)->getSprite());
         }
     }
 }

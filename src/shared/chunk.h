@@ -20,6 +20,7 @@ public:
     ~Chunk();
 
 private:
+
     //
     float Xo, Yo;
 

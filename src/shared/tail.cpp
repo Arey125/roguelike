@@ -5,43 +5,49 @@
 
 #include <iostream>
 
-const float SCALED = 30.f;
-
-Tail::Tail(b2World& world, float X, float Y, bool isWay_): isWay(isWay_)
+Tail::Tail(b2World& world, float X, float Y, unsigned int size_, bool isWay_): 
+    isWay(isWay_), size(size_)
 {
     color = new sf::Color;
+    texture = new sf::Texture;
+
+    pos.x = X;
+    pos.y = Y;
 
     if (!isWay)
     {
-        buildBody(world, X, Y);
+        buildBody(world);
+
+        texture->loadFromFile("wall1.png", 
+                             sf::IntRect(0,0,size,size));
     }
+    else
+    {
+        texture->loadFromFile("way2.jpg", 
+                             sf::IntRect(0,0,size,size));
+    }
+
+    sprite.setTexture(*texture);
+
+    //sprite.setOrigin(0.f, 0.f);
+    sprite.setPosition(pos.x, pos.y);
 }
 
-void Tail::buildBody(b2World& world, float X, float Y)
+void Tail::buildBody(b2World& world)
 {
     b2BodyDef BodyDef;
-    BodyDef.position.Set(X + 25, Y + 25);
+    BodyDef.position.Set(pos.x + (size/2), pos.y + (size/2));
 
     BodyDef.type = b2_staticBody; 
     b2Body* Body = world.CreateBody(&BodyDef);
 
     Shape = new b2PolygonShape;
-    Shape->SetAsBox((50.f/2.f), (50.f/2.f));
+    Shape->SetAsBox((size/2.f), (size/2.f));
 
     Body->CreateFixture(Shape, 1.0);
-
-    sf::Texture* GroundTexture = new sf::Texture;
-    GroundTexture->loadFromFile("wall1.png", 
-                                sf::IntRect(0,0,50,50));
-
-    sprite.setTexture(*GroundTexture, true);
-
-    //sprite.setOrigin(0.f, 0.f);
-    sprite.setPosition(Body->GetPosition().x-25, Body->GetPosition().y-25);
-    //sprite.setRotation(180/b2_pi * Body->GetAngle());
 }
 
-sf::Sprite& Tail::getShape()
+sf::Sprite& Tail::getSprite()
 {
     return sprite;
 }
@@ -79,4 +85,5 @@ void Tail::render(sf::RenderTarget &target)
 Tail::~Tail()
 {
     delete color;
+    delete texture;
 }
