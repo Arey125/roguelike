@@ -13,7 +13,7 @@ public:
 
     void update() override;
     void processEvent(sf::Event &event);
-    void render(sf::RenderTarget &target) override;
+    void render(/*sf::RenderTarget &target*/) override;
 
     int getFPS();
 

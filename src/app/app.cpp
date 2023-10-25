@@ -11,6 +11,8 @@
 
 #include "shared/map.h"
 
+#include "entity/Player.h"
+
 #include <iostream>
 
 App::App() :window(sf::VideoMode(800, 800), "SFML works!") {
@@ -20,11 +22,16 @@ App::App() :window(sf::VideoMode(800, 800), "SFML works!") {
 }
 
 void App::run() {
-    b2World world({0, 0});
+    //b2World world({0, 0});
 
-    EntityFactory entity_factory(world);
+    //EntityFactory entity_factory(world);
 
-    auto player = entity_factory.createPlayer();
+    // инициализация вида
+    sf::View* view = new sf::View(sf::FloatRect(0.f, 0.f, 800.f, 800.f));
+    //
+
+    //Entity entityPlayer = EntityFactory::Instance()->createPlayer(&window);
+    Player player(&window);
 
     int32 velocityIterations = 6;
     int32 positionIterations = 2;
@@ -32,8 +39,15 @@ void App::run() {
     sf::Clock deltaClock;
     Menu menu(window);
 
+    //
     Map* map = Map::Instance();
-    map->generated(world);
+    b2World* world = EntityFactory::Instance()->getWorld();
+
+    //std::cout << "1111" << std::endl;
+
+    map->generated(*world);
+
+    //std::cout << "2222" << std::endl;
 
     while (window.isOpen())
     {
@@ -52,19 +66,24 @@ void App::run() {
         ImGui::SFML::Update(window, deltaClock.restart());
         menu.update();
 
+        //std::cout << "3333" << std::endl;
+
         auto fps = menu.getFPS();
-        world.Step(1./fps, velocityIterations, positionIterations);
+        
+        world->Step(1./fps, velocityIterations, positionIterations);
         //std::cout<< world.GetContactCount() << world.GetBodyCount() << std::endl;
-        for (auto contact = world.GetContactList(); contact; contact = contact->GetNext()) {
+        for (auto contact = world->GetContactList(); contact; contact = contact->GetNext()) {
             player.testContact(contact);
         }
+
+        //td::cout << "4444" << std::endl;
+
         player.update();
         
-
         window.clear();
 
         map->render(window);
-        player.render(window);
+        player.render();
 
         ImGui::SFML::Render(window);
         window.display();

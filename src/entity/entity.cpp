@@ -4,13 +4,16 @@
 #include "entity.h"
 
 
-Entity::Entity(b2World &world, std::function<Controller *(b2Body *)> createController) {
+Entity::Entity(b2World* world, std::function<Controller *(b2Body *)> createController,
+               sf::RenderWindow* renderWindow) {
+    pWindow = renderWindow;
+
     b2BodyDef bodyDef;
     bodyDef.type = b2_dynamicBody;
     bodyDef.position.Set(400.0f, 300.0f);
     bodyDef.fixedRotation = true;
 
-    body = world.CreateBody(&bodyDef);
+    body = world->CreateBody(&bodyDef);
     b2PolygonShape dynamicBox;
     dynamicBox.SetAsBox(10.0f, 10.0f);
 
@@ -37,6 +40,11 @@ Entity::~Entity() {
     delete controller;
 }
 
+const b2Vec2& Entity::getPosition()
+{
+    return body->GetPosition();
+}
+
 void Entity::update() {
     controller->update();
 
@@ -51,10 +59,20 @@ void Entity::update() {
     shape.setPosition({position.x, position.y});
     shape.setFillColor(contact ? sf::Color::Red : sf::Color::White);
     contact = false;
+
+/*
+    sf::View view(sf::FloatRect(0.f, 0.f, 800.f, 800.f)); // инициализация вида
+ 
+    // перемещение начала координат в левую верхнюю часть экрана
+    view.setCenter(sf::Vector2f(position.x, position.y));
+ 
+    pWindow->setView(view);
+    */
 }
                                                       
-void Entity::render(sf::RenderTarget &target) {
-    target.draw(shape);
+void Entity::render(/*sf::RenderTarget &target*/) {
+    //target.draw(shape);
+    pWindow->draw(shape);
 }
 
 void Entity::testContact(b2Contact *contact) {

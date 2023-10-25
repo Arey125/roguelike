@@ -6,17 +6,19 @@
 
 class RigidBody: public GameObject {
 public:
-    RigidBody(sf::ConvexShape shape, b2Body* body);
+    RigidBody(sf::ConvexShape shape, b2Body* body, sf::RenderTarget* renderTarget);
 
     ~RigidBody() override = default;
 
     // GameObject
     void update() override;
-    void render(sf::RenderTarget &target) override;
+    void render(/*sf::RenderTarget &target*/) override;
 
 private:
     sf::ConvexShape shape;
     b2Body *body;
+
+    sf::RenderTarget* renderTarget;
 };
 
 

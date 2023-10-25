@@ -4,14 +4,31 @@
 #include "controllers/create_controller.h"
 
 
-EntityFactory::EntityFactory(b2World &world)
+EntityFactory* EntityFactory::instance = nullptr;
+
+EntityFactory* EntityFactory::Instance()
+{
+    if (instance == nullptr)
+    {
+        instance = new EntityFactory(new b2World({0, 0}));
+    }
+
+    return instance;
+}
+
+b2World* EntityFactory::getWorld()
+{
+    return world;
+}
+
+EntityFactory::EntityFactory(b2World* world)
     : world(world) {}
 
 
-Entity EntityFactory::createPlayer() {
-    return Entity(world, createController<InputController>);
+Entity* EntityFactory::createPlayer(sf::RenderWindow* window) {
+    return new Entity(world, createController<InputController>, window);
 }
 
-Entity EntityFactory::createEntity() {
-    return Entity(world, createController<AIController>);
+Entity* EntityFactory::createEntity(sf::RenderWindow* window) {
+    return new Entity(world, createController<AIController>, window);
 }

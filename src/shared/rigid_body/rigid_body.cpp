@@ -2,8 +2,8 @@
 
 #include <utility>
 
-RigidBody::RigidBody(sf::ConvexShape shape, b2Body* body):
-    shape(std::move(shape)), body(body) {}
+RigidBody::RigidBody(sf::ConvexShape shape, b2Body* body, sf::RenderTarget* renderTarget):
+    shape(std::move(shape)), body(body), renderTarget(renderTarget) {}
 
 void RigidBody::update() {
     b2Vec2 position = body->GetPosition();
@@ -12,7 +12,8 @@ void RigidBody::update() {
     shape.setPosition({position.x, position.y});
 }
 
-void RigidBody::render(sf::RenderTarget &target) {
-    target.draw(shape);
+void RigidBody::render(/*sf::RenderTarget &target*/) {
+    //target.draw(shape);
+    renderTarget->draw(shape);
 }
 

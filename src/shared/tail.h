@@ -21,7 +21,7 @@ public:
 
     sf::Sprite& getSprite();
 
-    virtual void render(sf::RenderTarget &target) override;
+    virtual void render(/*sf::RenderTarget &target*/) override;
     virtual void update() override;
 
     void setIsWay(bool v);

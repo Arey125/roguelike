@@ -79,4 +79,8 @@ void Menu::update() {
     }
 }
 
-void Menu::render(sf::RenderTarget &target) {}
+void Menu::render(/*sf::RenderTarget &target*/) 
+{
+    // 
+
+}

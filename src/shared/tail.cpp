@@ -77,7 +77,7 @@ void Tail::update()
    
 }
 
-void Tail::render(sf::RenderTarget &target)
+void Tail::render(/*sf::RenderTarget &target*/)
 {
     
 }

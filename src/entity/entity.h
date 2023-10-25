@@ -8,10 +8,14 @@
 
 class Entity: public GameObject {
 public:
-    Entity(b2World &world, std::function <Controller* (b2Body*)> createController);
+    Entity(b2World* world, std::function <Controller* (b2Body*)> createController,
+           sf::RenderWindow* renderWindow);
+
     ~Entity();
 
-    virtual void render(sf::RenderTarget &target) override;
+    const b2Vec2& getPosition();
+
+    virtual void render(/*sf::RenderTarget &target*/) override;
     virtual void update() override;
 
     // for test purposes
@@ -22,6 +26,7 @@ private:
     b2Body *body;
     Controller* controller;
 
+    sf::RenderWindow* pWindow;
 
     // for test purposes
     bool contact = false;
