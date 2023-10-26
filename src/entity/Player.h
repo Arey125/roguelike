@@ -18,6 +18,8 @@ public:
 
 private:
     Entity* entity;
+
+    sf::RenderWindow* window;
 };
 
 
