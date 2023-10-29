@@ -8,7 +8,13 @@ Menu::Menu(sf::Window &window):
     menuIsOpen(false),
     fps(60),
     v_sync(false)
-{}
+{
+    auto style = &ImGui::GetStyle();
+    style->ScaleAllSizes(3);
+    style->GrabRounding = 5;
+    style->FrameRounding = 5;
+    style->WindowRounding = 5;
+}
 
 
 int Menu::getFPS() {
