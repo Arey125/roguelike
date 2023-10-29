@@ -59,15 +59,6 @@ void Entity::update() {
     shape.setPosition({position.x, position.y});
     shape.setFillColor(contact ? sf::Color::Red : sf::Color::White);
     contact = false;
-
-/*
-    sf::View view(sf::FloatRect(0.f, 0.f, 800.f, 800.f)); // инициализация вида
- 
-    // перемещение начала координат в левую верхнюю часть экрана
-    view.setCenter(sf::Vector2f(position.x, position.y));
- 
-    pWindow->setView(view);
-    */
 }
                                                       
 void Entity::render(/*sf::RenderTarget &target*/) {

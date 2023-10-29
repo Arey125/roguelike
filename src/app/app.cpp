@@ -22,10 +22,6 @@ App::App() :window(sf::VideoMode(800, 800), "SFML works!") {
 }
 
 void App::run() {
-    //b2World world({0, 0});
-
-    //EntityFactory entity_factory(world);
-
     // инициализация вида
     sf::View* view = new sf::View(sf::FloatRect(0.f, 0.f, 800.f, 800.f));
     //
@@ -43,11 +39,7 @@ void App::run() {
     Map* map = Map::Instance();
     b2World* world = EntityFactory::Instance()->getWorld();
 
-    //std::cout << "1111" << std::endl;
-
-    map->generated(*world);
-
-    //std::cout << "2222" << std::endl;
+    map->generated(*world, player.getPosition());
 
     while (window.isOpen())
     {
@@ -66,8 +58,6 @@ void App::run() {
         ImGui::SFML::Update(window, deltaClock.restart());
         menu.update();
 
-        //std::cout << "3333" << std::endl;
-
         auto fps = menu.getFPS();
         
         world->Step(1./fps, velocityIterations, positionIterations);
@@ -76,13 +66,13 @@ void App::run() {
             player.testContact(contact);
         }
 
-        //td::cout << "4444" << std::endl;
-
         player.update();
         
         window.clear();
 
-        map->render(window);
+        map->generated(*world, player.getPosition());
+
+        map->render(window, player.getPosition());
         player.render();
 
         ImGui::SFML::Render(window);

@@ -22,6 +22,11 @@ void Player::update()
     window->setView(view);
 }
 
+const b2Vec2& Player::getPosition()
+{
+    return entity->getPosition();
+}
+
 void Player::render()
 {
     entity->render();

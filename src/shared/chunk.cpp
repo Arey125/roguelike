@@ -6,10 +6,10 @@ Chunk::Chunk(b2World& world, float X, float Y): Xo(X), Yo(Y)
 {
     // Инициализация случайных тайлов
     bool isWay = false;
-    for (int i=0; i<SIZE; i++)
+    for (int i=0; i<tSIZE; i++)
     {
         tiles.push_back(new std::vector <Tail*>);
-        for (int j=0; j<SIZE; j++)
+        for (int j=0; j<tSIZE; j++)
         {
             isWay = randBool(0.8);
             tiles[i]->push_back(new Tail(world, 
@@ -27,13 +27,18 @@ Chunk::Chunk(b2World& world, float X, float Y): Xo(X), Yo(Y)
     shape.setSize(sf::Vector2f(sizeTail, sizeTail));
 }
 
+unsigned int Chunk::getSize()
+{
+    return pSIZE;
+}
+
 void Chunk::setColorsTails()
 {
     bool isWall;
     sf::Color colorTail;
-    for (int idX = 0; idX < SIZE; idX++)
+    for (int idX = 0; idX < tSIZE; idX++)
     {
-        for (int idY = 0; idY < SIZE; idY++)
+        for (int idY = 0; idY < tSIZE; idY++)
         {
             //
             isWall = !tiles[idX]->at(idY)->getIsWay();
@@ -54,8 +59,8 @@ void Chunk::generation(/*const b2World& world*/)
 
     for (int i = 0; i < 1800; i++)
     {
-        idX = rand()%SIZE;
-        idY = rand()%SIZE;
+        idX = rand()%tSIZE;
+        idY = rand()%tSIZE;
 
         /*Правила клеточного автомата*/ 
         // 1)
@@ -73,9 +78,9 @@ void Chunk::update()
 
 void Chunk::render(sf::RenderTarget &target)
 {
-    for (int idX = 0; idX < SIZE; idX++)
+    for (int idX = 0; idX < tSIZE; idX++)
     {
-        for (int idY = 0; idY < SIZE; idY++)
+        for (int idY = 0; idY < tSIZE; idY++)
         {
             target.draw(tiles.at(idX)->at(idY)->getSprite());
         }
@@ -91,8 +96,8 @@ double Chunk::qNeighborhood(unsigned int idX, unsigned int idY)
 {
     double quotient = 0.0;
 
-    if (idX > 0 & idX != SIZE - 1 &
-        idY > 0 & idY != SIZE - 1)
+    if (idX > 0 & idX != tSIZE - 1 &
+        idY > 0 & idY != tSIZE - 1)
         {
             if (tiles.at(idX - 1)->at(idY)->getIsWay()) quotient += 0.15;
             if (tiles.at(idX + 1)->at(idY)->getIsWay()) quotient += 0.15;
@@ -111,13 +116,13 @@ double Chunk::qNeighborhood(unsigned int idX, unsigned int idY)
         if (idX > 0)
             if (tiles.at(idX - 1)->at(idY)->getIsWay()) quotient += 0.15;
 
-        if (idX != SIZE - 1)
+        if (idX != tSIZE - 1)
             if (tiles.at(idX + 1)->at(idY)->getIsWay()) quotient += 0.15;
 
         if (idY > 0)
             if (tiles.at(idX)->at(idY - 1)->getIsWay()) quotient += 0.15;
 
-        if (idY != SIZE - 1)
+        if (idY != tSIZE - 1)
             if (tiles.at(idX)->at(idY + 1)->getIsWay()) quotient += 0.15;
         }
 

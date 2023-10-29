@@ -11,6 +11,8 @@ public:
     void update();
     void render();
 
+    const b2Vec2& getPosition();
+
     // for test purposes
     void testContact(b2Contact *contact);
 

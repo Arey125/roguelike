@@ -17,6 +17,9 @@ public:
     //
     static bool randBool(double pTrue = 0.5);
 
+    //
+    static unsigned int getSize();
+
     ~Chunk();
 
 private:
@@ -30,14 +33,17 @@ private:
     //
     void setColorsTails();
 
+    // Размер одного квадрата (тайла)
+    static const unsigned int sizeTail = 50;
+
     // Размер чанка
-    const unsigned int SIZE = 32; 
+    static const unsigned int tSIZE = 16; // в тайлах
+    static const unsigned int pSIZE = sizeTail * tSIZE; // в пикселях
 
     // Квадраты внутри одного чанка
     std::vector <std::vector <Tail*>*> tiles;
 
-    // Размер одного квадрата 
-    const unsigned int sizeTail = 50;
+    
 
     //  
     sf::RectangleShape shape;
