@@ -9,7 +9,7 @@
 #include "entity/entity.h"
 #include "ui/menu.h"
 
-#include "shared/map.h"
+#include "map/map.h"
 
 #include "entity/Player.h"
 
@@ -36,7 +36,7 @@ void App::run() {
     Menu menu(window);
 
     //
-    Map* map = Map::Instance();
+    Map* map = new Map();
     b2World* world = EntityFactory::Instance()->getWorld();
 
     map->generated(*world, player.getPosition());

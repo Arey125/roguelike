@@ -4,7 +4,7 @@
 #include "SFML/Graphics.hpp"
 #include <vector>
 
-#include "tail.h"
+#include "tile.h"
 
 class Chunk
 {
@@ -41,7 +41,7 @@ private:
     static const unsigned int pSIZE = sizeTail * tSIZE; // в пикселях
 
     // Квадраты внутри одного чанка
-    std::vector <std::vector <Tail*>*> tiles;
+    std::vector <std::vector <Tile*>*> tiles;
 
     
 

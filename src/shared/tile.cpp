@@ -1,11 +1,11 @@
-#include "tail.h"
+#include "tile.h"
 
 #include <box2d/box2d.h>
 #include "controllers/input_controller.h"
 
 #include <iostream>
 
-Tail::Tail(b2World& world, float X, float Y, unsigned int size_, bool isWay_): 
+Tile::Tile(b2World& world, float X, float Y, unsigned int size_, bool isWay_): 
     isWay(isWay_), size(size_)
 {
     color = new sf::Color;
@@ -33,7 +33,7 @@ Tail::Tail(b2World& world, float X, float Y, unsigned int size_, bool isWay_):
     sprite.setPosition(pos.x, pos.y);
 }
 
-void Tail::buildBody(b2World& world)
+void Tile::buildBody(b2World& world)
 {
     b2BodyDef BodyDef;
     BodyDef.position.Set(pos.x + (size/2), pos.y + (size/2));
@@ -47,42 +47,42 @@ void Tail::buildBody(b2World& world)
     Body->CreateFixture(Shape, 1.0);
 }
 
-sf::Sprite& Tail::getSprite()
+sf::Sprite& Tile::getSprite()
 {
     return sprite;
 }
 
-void Tail::setIsWay(bool v)
+void Tile::setIsWay(bool v)
 {
     isWay = v;
 }
 
-bool Tail::getIsWay()
+bool Tile::getIsWay()
 {
     return isWay;
 }
 
-void Tail::setColor(const sf::Color& color_)
+void Tile::setColor(const sf::Color& color_)
 {
     *color = color_;
 }
 
-const sf::Color& Tail::getColor()
+const sf::Color& Tile::getColor()
 {
     return *color;
 }
 
-void Tail::update()
+void Tile::update()
 {
    
 }
 
-void Tail::render(/*sf::RenderTarget &target*/)
+void Tile::render(/*sf::RenderTarget &target*/)
 {
     
 }
 
-Tail::~Tail()
+Tile::~Tile()
 {
     delete color;
     delete texture;

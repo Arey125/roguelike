@@ -21,12 +21,16 @@ public:
     // for test purposes
     void testContact(b2Contact *contact);
 
+    int getCondMove();
+
 private:
     sf::ConvexShape shape;
     b2Body *body;
     Controller* controller;
 
     sf::RenderWindow* pWindow;
+
+    float angleMove;
 
     // for test purposes
     bool contact = false;

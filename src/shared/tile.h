@@ -1,5 +1,5 @@
-#ifndef TAIL_H
-#define TAIL_H
+#ifndef TILE_H
+#define TILE_H
 
 #include "SFML/Graphics.hpp"
 
@@ -9,10 +9,10 @@
 #include "shared/game_object.h"
 #include "shared/controller.h"
 
-class Tail: public GameObject
+class Tile: public GameObject
 {
 public:
-    Tail(b2World& world, float X, float Y, 
+    Tile(b2World& world, float X, float Y, 
          unsigned int size, 
          bool isWay = true);
     
@@ -30,7 +30,7 @@ public:
     void setColor(const sf::Color& color);                      
     const sf::Color& getColor();
 
-    ~Tail();
+    ~Tile();
 
 private:
     // w,h
@@ -48,4 +48,4 @@ private:
     void buildBody(b2World& world);
 };
 
-#endif //TAIL_H
+#endif //TILE_H

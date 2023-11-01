@@ -2,22 +2,15 @@
 
 #include <iostream>
 
-Map* Map::instance = nullptr;
-
-Map* Map::Instance()
+Map::Map()
 {
-    if (instance == nullptr)
-    {
-        instance = new Map;
-    }
-
-    return instance;
+    
 }
 
 void Map::generated(b2World& world, const b2Vec2& posPlayer)
 {
     int idX, idY;
-    Pos_to_id_chunk(posPlayer, idX, idY);
+    posToIdChunk(posPlayer, idX, idY);
 
     genChunk(world, idX, idY);
 
@@ -54,12 +47,7 @@ void Map::genChunk(b2World& world, int idX, int idY)
     }
 }
 
-Map::Map()
-{
-    
-}
-
-void Map::Pos_to_id_chunk(const b2Vec2& pos, int& idX, int& idY)
+void Map::posToIdChunk(const b2Vec2& pos, int& idX, int& idY)
 {
     idX = pos.x / int(Chunk::getSize());
     idY = pos.y / int(Chunk::getSize());
@@ -71,7 +59,7 @@ void Map::Pos_to_id_chunk(const b2Vec2& pos, int& idX, int& idY)
 void Map::render(sf::RenderTarget &target, const b2Vec2& posPlayer)
 {
     int idX, idY;
-    Pos_to_id_chunk(posPlayer, idX, idY);
+    posToIdChunk(posPlayer, idX, idY);
 
     chunks[idX][idY]->render(target);
 

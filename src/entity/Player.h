@@ -21,6 +21,11 @@ public:
 private:
     Entity* entity;
 
+    sf::Texture* texture;
+    sf::Sprite sprite;
+
+    std::map<int, sf::Texture*> textures;
+
     sf::RenderWindow* window;
 };
 

@@ -8,11 +8,11 @@ Chunk::Chunk(b2World& world, float X, float Y): Xo(X), Yo(Y)
     bool isWay = false;
     for (int i=0; i<tSIZE; i++)
     {
-        tiles.push_back(new std::vector <Tail*>);
+        tiles.push_back(new std::vector <Tile*>);
         for (int j=0; j<tSIZE; j++)
         {
             isWay = randBool(0.8);
-            tiles[i]->push_back(new Tail(world, 
+            tiles[i]->push_back(new Tile(world, 
                                                 Xo + (j*sizeTail), 
                                                 Yo + (i*sizeTail), 
                                                 sizeTail, isWay));
