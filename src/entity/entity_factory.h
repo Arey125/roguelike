@@ -6,11 +6,19 @@
 
 class EntityFactory {
 public:
-    EntityFactory(b2World &world);
+    static EntityFactory* Instance();
 
-    Entity createPlayer();
-    Entity createEntity();
+    Entity* createPlayer(sf::RenderWindow* window);
+    Entity* createEntity(sf::RenderWindow* window);
+
+    b2World* getWorld();
+
+protected:
+    EntityFactory(b2World* world);
 
 private:
-    b2World &world;
+    b2World* world;
+
+    // Единственный экземляр класса
+    static EntityFactory* instance;
 };

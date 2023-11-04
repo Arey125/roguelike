@@ -2,42 +2,71 @@
 
 #include <box2d/box2d.h>
 
-Chunk::Chunk()
+Chunk::Chunk(b2World& world, float X, float Y): Xo(X), Yo(Y)
 {
-    // Инициализация случайных квадратов
-    for (int i=0; i<SIZE; i++)
+    // Инициализация случайных тайлов
+    bool isWay = false;
+    for (int i=0; i<tSIZE; i++)
     {
-        squares.push_back(new std::vector <bool>);
-        for (int j=0; j<SIZE; j++)
+        tiles.push_back(new std::vector <Tile*>);
+        for (int j=0; j<tSIZE; j++)
         {
-            squares[i]->push_back(randBool());
+            isWay = randBool(0.8);
+            tiles[i]->push_back(new Tile(world, 
+                                                Xo + (j*sizeTail), 
+                                                Yo + (i*sizeTail), 
+                                                sizeTail, isWay));
         }
     }
 
-    this->generation();
+    this->generation(/*world*/);
 
-    shapeWall = new sf::RectangleShape(sf::Vector2f(sizeShare, sizeShare));
-    shapeWall->setFillColor(sf::Color(0, 0, 0));
+    // Присваивание цвета в зависимости от карты
+    setColorsTails();
 
-    shapeTrail = new sf::RectangleShape(sf::Vector2f(sizeShare, sizeShare));
-    shapeTrail->setFillColor(sf::Color(0, 255, 0));
+    shape.setSize(sf::Vector2f(sizeTail, sizeTail));
 }
 
-void Chunk::generation()
+unsigned int Chunk::getSize()
+{
+    return pSIZE;
+}
+
+void Chunk::setColorsTails()
+{
+    bool isWall;
+    sf::Color colorTail;
+    for (int idX = 0; idX < tSIZE; idX++)
+    {
+        for (int idY = 0; idY < tSIZE; idY++)
+        {
+            //
+            isWall = !tiles[idX]->at(idY)->getIsWay();
+
+            if (isWall) colorTail = sf::Color::Black;
+            else colorTail = sf::Color::Green;
+            tiles[idX]->at(idY)->setColor(colorTail);
+        }
+    }
+}
+
+void Chunk::generation(/*const b2World& world*/)
 {
     int idX;
     int idY;
 
     bool v;
 
-    for (int i = 0; i < 800; i++)
+    for (int i = 0; i < 1800; i++)
     {
-        idX = rand()%SIZE;
-        idY = rand()%SIZE;
+        idX = rand()%tSIZE;
+        idY = rand()%tSIZE;
 
-        // Правила клеточного автомата
-        if (qNeighborhood(idX, idY) >= 0.5) squares.at(idX)->at(idY) = true;
-        if (qNeighborhood(idX, idY) < 0.25) squares.at(idX)->at(idY) = false;
+        /*Правила клеточного автомата*/ 
+        // 1)
+        if (qNeighborhood(idX, idY) >= 0.5) tiles.at(idX)->at(idY)->setIsWay(true);
+        // 2)
+        if (qNeighborhood(idX, idY) < 0.25) tiles.at(idX)->at(idY)->setIsWay(false);
 
     }
 }
@@ -49,26 +78,11 @@ void Chunk::update()
 
 void Chunk::render(sf::RenderTarget &target)
 {
-    int Xo = 0;
-    int Yo = 0;
-
-    sf::RectangleShape* shape;
-
-    for (int idX = 0; idX < SIZE; idX++)
+    for (int idX = 0; idX < tSIZE; idX++)
     {
-        for (int idY = 0; idY < SIZE; idY++)
+        for (int idY = 0; idY < tSIZE; idY++)
         {
-            if (squares.at(idX)->at(idY))
-            {
-                shape = shapeTrail;
-            }
-            else
-            {
-                shape = shapeWall;
-            }
-
-            shape->setPosition(Xo + (idY * sizeShare), Yo + (idX * sizeShare));
-            target.draw(*shape);
+            target.draw(tiles.at(idX)->at(idY)->getSprite());
         }
     }
 }
@@ -82,34 +96,34 @@ double Chunk::qNeighborhood(unsigned int idX, unsigned int idY)
 {
     double quotient = 0.0;
 
-    if (idX > 0 & idX != SIZE - 1 &
-        idY > 0 & idY != SIZE - 1)
+    if (idX > 0 & idX != tSIZE - 1 &
+        idY > 0 & idY != tSIZE - 1)
         {
-            if (squares.at(idX - 1)->at(idY)) quotient += 0.15;
-            if (squares.at(idX + 1)->at(idY)) quotient += 0.15;
-            if (squares.at(idX)->at(idY - 1)) quotient += 0.15;
-            if (squares.at(idX)->at(idY + 1)) quotient += 0.15;
+            if (tiles.at(idX - 1)->at(idY)->getIsWay()) quotient += 0.15;
+            if (tiles.at(idX + 1)->at(idY)->getIsWay()) quotient += 0.15;
+            if (tiles.at(idX)->at(idY - 1)->getIsWay()) quotient += 0.15;
+            if (tiles.at(idX)->at(idY + 1)->getIsWay()) quotient += 0.15;
 
-            if (squares.at(idX + 1)->at(idY + 1)) quotient += 0.1;
-            if (squares.at(idX - 1)->at(idY - 1)) quotient += 0.1;
-            if (squares.at(idX - 1)->at(idY + 1)) quotient += 0.1;
-            if (squares.at(idX + 1)->at(idY - 1)) quotient += 0.1;
+            if (tiles.at(idX + 1)->at(idY + 1)->getIsWay()) quotient += 0.1;
+            if (tiles.at(idX - 1)->at(idY - 1)->getIsWay()) quotient += 0.1;
+            if (tiles.at(idX - 1)->at(idY + 1)->getIsWay()) quotient += 0.1;
+            if (tiles.at(idX + 1)->at(idY - 1)->getIsWay()) quotient += 0.1;
 
         }
     else{
         quotient += 0.1; // Чтоб по краям чанка не всегда были стены
 
         if (idX > 0)
-            if (squares.at(idX - 1)->at(idY)) quotient += 0.15;
+            if (tiles.at(idX - 1)->at(idY)->getIsWay()) quotient += 0.15;
 
-        if (idX != SIZE - 1)
-            if (squares.at(idX + 1)->at(idY)) quotient += 0.15;
+        if (idX != tSIZE - 1)
+            if (tiles.at(idX + 1)->at(idY)->getIsWay()) quotient += 0.15;
 
         if (idY > 0)
-            if (squares.at(idX)->at(idY - 1)) quotient += 0.15;
+            if (tiles.at(idX)->at(idY - 1)->getIsWay()) quotient += 0.15;
 
-        if (idY != SIZE - 1)
-            if (squares.at(idX)->at(idY + 1)) quotient += 0.15;
+        if (idY != tSIZE - 1)
+            if (tiles.at(idX)->at(idY + 1)->getIsWay()) quotient += 0.15;
         }
 
     return quotient;
@@ -117,6 +131,5 @@ double Chunk::qNeighborhood(unsigned int idX, unsigned int idY)
 
 Chunk::~Chunk()
 {
-    delete shapeWall;
-    delete shapeTrail;
+    // Очистка контнеров tiles и colorTiles
 }

@@ -10,6 +10,10 @@ AIController::AIController(b2Body *body)
 
 AIController::~AIController() {}
 
+int AIController::getCondMove()
+{
+    return condMove;
+}
 
 void AIController::update() {
     body->ApplyForceToCenter(b2Vec2(0.0f, -100.0f), true);

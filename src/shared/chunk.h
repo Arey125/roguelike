@@ -4,10 +4,12 @@
 #include "SFML/Graphics.hpp"
 #include <vector>
 
+#include "tile.h"
+
 class Chunk
 {
 public:
-    Chunk();
+    Chunk(b2World& world, float Xo, float Yo);
 
     void update();
     void render(sf::RenderTarget &target);
@@ -15,26 +17,41 @@ public:
     //
     static bool randBool(double pTrue = 0.5);
 
+    //
+    static unsigned int getSize();
+
     ~Chunk();
 
 private:
+
     //
-    void generation();
+    float Xo, Yo;
+
+    //
+    void generation(/*const b2World& world*/);
+
+    //
+    void setColorsTails();
+
+    // Размер одного квадрата (тайла)
+    static const unsigned int sizeTail = 50;
 
     // Размер чанка
-    const unsigned int SIZE = 16; 
+    static const unsigned int tSIZE = 16; // в тайлах
+    static const unsigned int pSIZE = sizeTail * tSIZE; // в пикселях
 
     // Квадраты внутри одного чанка
-    std::vector <std::vector <bool>*> squares;
+    std::vector <std::vector <Tile*>*> tiles;
 
-    // Размер одного квадрата 
-    const unsigned int sizeShare = 50;
+    
 
     //  
-    sf::RectangleShape* shapeWall;
-    sf::RectangleShape* shapeTrail;
+    sf::RectangleShape shape;
 
+    //
     double qNeighborhood(unsigned int idX, unsigned int idY);
+
+    bool contact;
 };
 
 

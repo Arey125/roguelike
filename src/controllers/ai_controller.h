@@ -9,6 +9,7 @@ public:
     ~AIController() override;
 
     void update() override;
+    int getCondMove() override;
 
 private:
     b2Body *body;

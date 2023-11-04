@@ -9,7 +9,11 @@
 #include "entity/entity.h"
 #include "ui/menu.h"
 
-#include "shared/map.h"
+#include "map/map.h"
+
+#include "entity/Player.h"
+
+#include <iostream>
 
 App::App() :window(sf::VideoMode(800, 800), "SFML works!") {
     window.setFramerateLimit(60);
@@ -18,11 +22,12 @@ App::App() :window(sf::VideoMode(800, 800), "SFML works!") {
 }
 
 void App::run() {
-    b2World world({0, 0});
+    // инициализация вида
+    sf::View* view = new sf::View(sf::FloatRect(0.f, 0.f, 800.f, 800.f));
+    //
 
-    EntityFactory entity_factory(world);
-
-    auto player = entity_factory.createPlayer();
+    //Entity entityPlayer = EntityFactory::Instance()->createPlayer(&window);
+    Player player(&window);
 
     int32 velocityIterations = 6;
     int32 positionIterations = 2;
@@ -30,7 +35,11 @@ void App::run() {
     sf::Clock deltaClock;
     Menu menu(window);
 
-    Map* map = Map::Instance();
+    //
+    Map* map = new Map();
+    b2World* world = EntityFactory::Instance()->getWorld();
+
+    map->generated(*world, player.getPosition());
 
     while (window.isOpen())
     {
@@ -50,17 +59,21 @@ void App::run() {
         menu.update();
 
         auto fps = menu.getFPS();
-        world.Step(1./fps, velocityIterations, positionIterations);
-        for (auto contact = world.GetContactList(); contact; contact = contact->GetNext()) {
+        
+        world->Step(1./fps, velocityIterations, positionIterations);
+        //std::cout<< world.GetContactCount() << world.GetBodyCount() << std::endl;
+        for (auto contact = world->GetContactList(); contact; contact = contact->GetNext()) {
             player.testContact(contact);
         }
+
         player.update();
         
-
         window.clear();
 
-        map->render(window);
-        player.render(window);
+        map->generated(*world, player.getPosition());
+
+        map->render(window, player.getPosition());
+        player.render();
 
         ImGui::SFML::Render(window);
         window.display();

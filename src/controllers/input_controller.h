@@ -10,6 +10,12 @@ public:
 
     void update() override;
 
+    int getCondMove() override;
+
 private:
     b2Body *body;
+
+    //int lastCondMove;
+
+    float vF = 2000.0f;
 };
